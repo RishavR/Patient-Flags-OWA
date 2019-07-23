@@ -5,11 +5,16 @@
 This repository contains the patientflags OpenMRS Open Web App.
 
 ## Pending Tasks
+ 
 
-1. Usage of Providers to implement Services. 
-2. Store to implement DTOs. 
-3. Routes for dynamic rendering of tabs. 
-4. Splitting REST Calls in each component into Services. 
+    Building the remaining 2 components.
+    Refactoring code.
+    Alert generator & global error handling mechanism.
+    Spinners when loading data into tables.
+    Figuring out routes & passing user and localization data.
+    Any pending & doable extra marks tasks.
+    Testing
+    Documentation.
 
 ## Dependencies List 
 
