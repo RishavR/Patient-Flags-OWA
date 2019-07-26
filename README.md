@@ -1,8 +1,10 @@
 <img src="https://cloud.githubusercontent.com/assets/668093/12567089/0ac42774-c372-11e5-97eb-00baf0fccc37.jpg" alt="OpenMRS"/>
 
-# patientflags
+# Patient Flags OWA
 
-This repository contains the patientflags OpenMRS Open Web App.
+This repository contains the Patient Flags OpenMRS Open Web App.
+
+<img src='https://raw.githubusercontent.com/RishavR/Patient-Flags-OWA/master/OVF1.PNG'/>
 
 ## Pending Tasks
  
