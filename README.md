@@ -8,15 +8,8 @@ This repository contains the Patient Flags OpenMRS Open Web App.
 
 ## Pending Tasks
  
-
-    Building the remaining 2 components.
-    Refactoring code.
-    Alert generator & global error handling mechanism.
-    Spinners when loading data into tables.
-    Figuring out routes & passing user and localization data.
-    Any pending & doable extra marks tasks.
-    Testing
-    Documentation.
+ Numberof Pending Tasks: 3
+ Listed Here: https://wiki.openmrs.org/display/projects/Patient+Flag+Module+OWA  
 
 ## Dependencies List 
 
