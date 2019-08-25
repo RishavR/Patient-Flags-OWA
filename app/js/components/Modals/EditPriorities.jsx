@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {CirclePicker} from 'react-color';
 import {connect} from 'react-redux';
 import {updatePriorities} from '../../actions/priorityActions';
+import {API_CONTEXT_PATH} from '../../apiContext';
+
 class EditPriorities extends Component {  
     constructor(props) {
         super(props);
@@ -23,24 +25,20 @@ class EditPriorities extends Component {
       componentDidMount(){
         /// REST Call for Tag data if UUID is available 
         if((this.props.dataFromChild)!= null){
-          console.log(this.props.dataFromChild);
+          
           var str = this.state.urlSuffix=this.props.dataFromChild.name;
-          console.log(str);
+          
           //REST Call 
-          var url='http://localhost:8081/openmrs/ws/rest/v1/patientflags/priority/'+encodeURI(str)+'?v=full'; // TODO: pick up base URL from {Origin}
-          var auth='Basic YWRtaW46QWRtaW4xMjM='; // TODO: pick up from user login credentials 
-          console.log("Successful Entry");
+          var url=API_CONTEXT_PATH+'/patientflags/priority/'+encodeURI(str)+'?v=full'; 
+          
           fetch(url, {
               method: 'GET',
-              withCredentials: true,
-              credentials: 'include',
               headers: {
-                  'Authorization': auth,
                   'Content-Type': 'application/json'
               }
           }).then(res => res.json())
           .then((data) => {
-              console.log('URI Data',data.name);
+              
               for (var property in data){
                 if(data.hasOwnProperty(property)){
                   this.setState((prevState) =>({
@@ -58,17 +56,19 @@ class EditPriorities extends Component {
           //End of Call
         }
       }
+      componentDidUpdate(){
+      }
       postPriority(){
         //Simple API call with no effect on state change. State change reflected in callBack from Parent
         this.props.dispatch(updatePriorities(this.state.urlSuffix,this.state.editData));
       }
 
       handleChange(name, event) {
-        console.log("Event Called");
+        
         const target = event.target;
         const value = target.value;
         //const name = target.name;
-        console.log(name+" "+value);
+        
         this.setState((prevState) =>({
             editData: Object.assign({}, prevState.editData, {
               [name]: value
@@ -76,7 +76,7 @@ class EditPriorities extends Component {
             }));
       }
       handleColorChange = (color) => {
-        console.log(color.hex);
+        
         this.setState((prevState) =>({
           editData: Object.assign({}, prevState.editData, {
             style:  color.hex
@@ -98,19 +98,30 @@ class EditPriorities extends Component {
     
       handleSubmit(event) {
         this.postPriority();
-        this.props.callBackFromParent(this.state.editData,this.props.index);
-        alert('A Priority name was submitted: ' + this.state.editData.name);
+        if(this.props.error==null){
+          this.props.callBackFromParent(this.state.editData,this.props.index);
+          alert('Priority Saved Successfully!');
+        }
+        else{
+          alert(this.props.error);
+        }
         event.preventDefault();
       }
       render() {
+        var nameField= null;
+          if(this.props.dataFromChild!=null)
+              nameField = <input readOnly type="text" className="form-control" id="flg" value={this.state.editData.name}/>
+          else  
+              nameField = <input type="text" className="form-control" id="flg" onChange = {this.handleChange.bind(this,'name')} value={this.state.editData.name}/>
         return (
             <div>
-                <h3>Edit Priority</h3>
-                <br/><br/>
-              <form className="container" onSubmit={this.handleSubmit} onReset={this.handleReset}> 
+                <div className="dialog-header">
+                      <i class="icon-folder-open"></i>&nbsp;<h3>Edit Priorities</h3>
+                </div>
+              <form className="container" onSubmit={this.handleSubmit}> 
                 <div className="form-group">
                     <label htmlFor="flg">Name:</label>
-                        <input type="text" className="form-control" id="flg" onChange = {this.handleChange.bind(this,'name')} value={this.state.editData.name}/>
+                        {nameField}
                 </div>
                 <br/><br/>
                 <div className="form-group">
@@ -124,7 +135,7 @@ class EditPriorities extends Component {
                 </div>
              <br/><br/>
                 <input type="submit" value="Save" className="button confirm"/>
-                &nbsp;<input type="reset" value="Reset" className="button"/>
+                &nbsp;<input type="reset" value="Cancel" className="button cancel" onClick={this.props.closeButton}/>
               </form>
              </div>
             );

@@ -1,3 +1,5 @@
+import {API_CONTEXT_PATH} from '../apiContext';
+
 var tableDataList=[]
 var dataLoaded=false
 
@@ -32,15 +34,11 @@ export function getPriorities(){
         console.log("API CALLED");
         tableDataList=[]
         dispatch(getPrioritiesBegin());
-        var url='http://localhost:8081/openmrs/ws/rest/v1/patientflags/priority/?v=full'; // TODO: pick up base URL from {Origin}
-        var auth='Basic YWRtaW46QWRtaW4xMjM='; // TODO: pick up from user login credentials 
+        var url=API_CONTEXT_PATH+'/patientflags/priority/?v=full'; 
         console.log("Successful Entry");
         return fetch(url, {
             method: 'GET',
-            withCredentials: true,
-            credentials: 'include',
             headers: {
-                'Authorization': auth,
                 'Content-Type': 'application/json'
             }
         }).then(res => res.json())
@@ -72,24 +70,23 @@ export function updatePriorities(destString,updateData){
         console.log(JSON.stringify(updateData));
         var url='';
         if(destString==='')
-            url = 'http://localhost:8081/openmrs/ws/rest/v1/patientflags/priority?v=full';
+            url =API_CONTEXT_PATH+'/patientflags/priority?v=full';
         else 
-            url='http://localhost:8081/openmrs/ws/rest/v1/patientflags/priority/'+encodeURI(destString)+'?v=full'; // TODO: pick up base URL from {Origin}
-        console.log(url);
-        var auth='Basic YWRtaW46QWRtaW4xMjM='; // TODO: pick up from user login credentials 
+            url=API_CONTEXT_PATH+'/patientflags/priority/'+encodeURI(destString)+'?v=full'; 
         console.log("Successful Entry");
         fetch(url, {
             method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
             headers: {
-                'Authorization': auth,
                 'Content-Type': 'application/json'
             },
             body:JSON.stringify(updateData)
         }).then(res => res.json())
         .then((data) => {
             console.log(data);
+            if(data.hasOwnProperty('error')){
+                dispatch(getFlagsFailure('Something Went Wrong',tableDataList));
+                return;
+            }
         });
             dispatch(updatePrioritiesSuccess(tableDataList));
         }
